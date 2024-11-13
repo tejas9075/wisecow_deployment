@@ -39,8 +39,23 @@ jobs:
       with:
         version: 'latest'
 
+    - name: Set up kubeconfig
+      run: |
+        echo "${{ secrets.KUBECONFIG_CONTENT }}" > $HOME/.kube/config
+        ls -la $HOME/.kube
+        cat $HOME/.kube/config
+
+    - name: Verify kubeconfig
+      run: kubectl config view
+
+    - name: Set Minikube context
+      run: kubectl config use-context minikube
+
     - name: Check kubectl context
       run: kubectl config current-context
+
+    - name: Check cluster info
+      run: kubectl cluster-info
 
     - name: Deploy to Kubernetes
       run: |
