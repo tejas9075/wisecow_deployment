@@ -42,14 +42,14 @@ jobs:
     - name: Create .kube directory
       run: mkdir -p $HOME/.kube
 
-    - name: Set up kubeconfig
-      run: echo "${{ secrets.KUBECONFIG_CONTENT }}" > $HOME/.kube/config
+    - name: Decode kubeconfig and set up
+      run: echo "${{ secrets.KUBECONFIG_CONTENT }}" | base64 --decode > $HOME/.kube/config
+
+    - name: Debug kubeconfig
+      run: cat $HOME/.kube/config | head -n 20  # Prints the first 20 lines
 
     - name: Verify kubeconfig
       run: kubectl config view
-
-    - name: Set Minikube context
-      run: kubectl config use-context minikube
 
     - name: Check kubectl context
       run: kubectl config current-context
